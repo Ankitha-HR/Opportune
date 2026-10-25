@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opportune — Campus Opportunity Organizer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f6f7fb;color:#17213d}
+button,input,select{font:inherit}.screen{min-height:100vh}.hidden{display:none!important}
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#171d4d,#4b49bd);padding:30px}
+.card{width:450px;background:#fff;border-radius:24px;padding:34px;box-shadow:0 20px 60px #1115}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:26px}.logoMark{width:40px;height:40px;border-radius:12px;background:#5d5ce6;color:white;display:grid;place-items:center;font-weight:800;font-size:21px}.brand{font-weight:800;font-size:20px}.sub{font-size:11px;color:#68749a;margin-top:3px}
+h1{font-size:29px;margin:18px 0 10px}.desc{color:#667294;font-size:13px;line-height:1.6;margin-bottom:22px}
+.tabs{display:flex;background:#f0f1f6;border-radius:10px;padding:3px;margin-bottom:24px}.tab{flex:1;padding:11px;text-align:center;border:0;background:transparent;color:#68708c;cursor:pointer;border-radius:8px;font-weight:600}.tab.active{background:white;color:#4d4cce;box-shadow:0 2px 7px #0000000d}
+label{display:block;font-size:10px;font-weight:800;color:#526080;margin:14px 0 7px}input,select{width:100%;padding:13px 14px;border:1px solid #dfe3ee;border-radius:10px;outline:none;background:white}input:focus,select:focus{border-color:#6564e8;box-shadow:0 0 0 3px #6564e81a}
+.primary{width:100%;border:0;border-radius:10px;background:#5b5be3;color:white;padding:13px;margin-top:18px;font-weight:700;cursor:pointer}.primary:hover{background:#4e4dcc}
+.notice{display:none;background:#edf9f2;border:1px solid #ccebd8;color:#28734a;border-radius:9px;padding:10px;font-size:11px;margin-bottom:14px}
+.note{font-size:10px;color:#8b94ad;text-align:center;margin-top:18px}.error{color:#c44343;font-size:11px;margin-top:8px;display:none}
+
+.app{min-height:100vh;display:flex}.side{width:264px;background:#fff;border-right:1px solid #e6e8f0;padding:22px;display:flex;flex-direction:column}.side .logo{margin-bottom:32px}.nav{display:flex;flex-direction:column;gap:8px}.nav button{border:0;background:transparent;text-align:left;padding:13px 15px;border-radius:10px;color:#586581;font-weight:600;cursor:pointer}.nav button.active,.nav button:hover{background:#eef0ff;color:#5654d9}.how{margin-top:30px;border:1px solid #e0e3f4;background:#fafaff;border-radius:15px;padding:15px;font-size:11px;color:#64708d;line-height:1.5}.profile{margin-top:auto;background:#f8f8fb;border-radius:13px;padding:13px;font-size:12px}.main{flex:1}.top{height:80px;background:#fff;border-bottom:1px solid #e6e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 38px}.search{width:410px}.avatar{width:36px;height:36px;border-radius:50%;background:#ececff;color:#5b59db;display:grid;place-items:center;font-weight:800}.content{padding:34px 40px;max-width:1150px;margin:auto}.hero{background:linear-gradient(120deg,#202653,#3d3c91);border-radius:22px;color:white;padding:42px 46px;position:relative;overflow:hidden}.hero h2{font-size:35px;max-width:650px;margin:10px 0 14px}.hero p{max-width:650px;color:#e2e4ff;font-size:14px;line-height:1.6}.hero button{margin-top:15px;width:auto;padding:13px 19px;background:white;color:#4e4dc9}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:24px 0}.stat{background:white;border:1px solid #e4e6ef;border-radius:16px;padding:20px}.stat b{font-size:24px}.stat small{display:block;color:#7a849f;margin-top:5px}.sectionTitle{font-size:22px;margin:30px 0 15px}.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}.opp{background:white;border:1px solid #e3e5ef;border-radius:16px;padding:19px}.opp h3{margin:8px 0}.tag{display:inline-block;background:#eeeefe;color:#5857d5;border-radius:20px;padding:5px 9px;font-size:10px}.muted{color:#78839d;font-size:12px;line-height:1.5}.page{display:none}.page.active{display:block}
+@media(max-width:800px){.side{display:none}.content{padding:20px}.stats,.cards{grid-template-columns:1fr}.top{padding:0 20px}.search{width:60%}}
+.attachments{margin-top:16px;border:1px dashed #cfd4e7;border-radius:12px;padding:14px;background:#fafaff}.attachRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid #eceef5;font-size:12px}.attachRow:last-child{border-bottom:0}.searchWrap{position:relative}.searchResults{position:absolute;top:48px;left:0;width:410px;background:#fff;border:1px solid #e1e4ee;border-radius:12px;box-shadow:0 12px 28px rgba(30,40,80,.12);z-index:50;display:none;overflow:hidden}.searchResult{padding:12px 14px;border-bottom:1px solid #eef0f5;cursor:pointer}.searchResult:hover{background:#f7f7ff}.searchResult:last-child{border-bottom:0}.searchResult b{display:block;color:#1c2850}.searchResult span{font-size:11px;color:#7b849d}.ocrStatus{margin-top:8px;font-size:12px;color:#5b6688}.imagePreview{max-width:180px;max-height:120px;border-radius:10px;border:1px solid #dfe3ee;margin-top:10px;display:block}.danger{background:#fff1f1!important;color:#b83c3c!important;border:1px solid #f0caca!important}.secondary{background:#f0f1ff!important;color:#5050c9!important;border:1px solid #d9daf5!important}
+.secondaryBtn{background:#fff;border:1px solid #d9ddec;color:#4d5878;padding:12px 22px;border-radius:10px;font-weight:700;cursor:pointer}.secondaryBtn:hover{background:#f6f7fb}</style>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+<!-- LOGIN -->
+<section id="loginScreen" class="screen auth">
+<div class="card">
+  <div class="logo"><div class="logoMark">O</div><div><div class="brand">Opportune</div><div class="sub">Campus opportunity organizer</div></div></div>
+  <h1>Welcome back</h1>
+  <p class="desc">Sign in to see your college opportunities, saved items and deadlines.</p>
+  <div id="createdNotice" class="notice">Account created successfully. Please log in to continue.</div>
+  <div class="tabs"><button class="tab active">Login</button><button id="goSignup" class="tab">Create account</button></div>
+  <label>EMAIL OR PHONE NUMBER</label>
+  <input id="loginId" placeholder="e.g. ankitha@gmail.com or 9876543210">
+  <label>PASSWORD</label>
+  <input id="loginPass" type="password" placeholder="Enter password">
+  <div id="loginError" class="error"></div>
+  <button id="loginBtn" class="primary">Login</button>
+  <div class="note">UI/UX prototype • Demo authentication runs locally in this prototype.</div>
+</div>
+</section>
+
+<!-- SIGNUP -->
+<section id="signupScreen" class="screen auth hidden">
+<div class="card">
+  <div class="logo"><div class="logoMark">O</div><div><div class="brand">Opportune</div><div class="sub">Campus opportunity organizer</div></div></div>
+  <h1>Create your account</h1>
+  <p class="desc">Join Opportune and keep your college opportunities, applications and deadlines organized.</p>
+  <div class="tabs"><button id="backLogin" class="tab">Login</button><button class="tab active">Create account</button></div>
+  <label>FULL NAME</label><input id="name" placeholder="Enter your full name">
+  <label>EMAIL OR PHONE NUMBER</label><input id="signupId" placeholder="e.g. ankitha@gmail.com or 9876543210">
+  <label>PASSWORD</label><input id="pass" type="password" placeholder="Create a password">
+  <label>CONFIRM PASSWORD</label><input id="confirm" type="password" placeholder="Re-enter your password">
+  <label>BRANCH</label>
+  <select id="branch">
+    <option value="">Select your branch</option>
+    <option>CSE</option>
+    <option>CSE (AIML)</option>
+    <option>CSE (Data Science)</option>
+    <option>ISE</option>
+    <option>ECE</option>
+    <option>EEE</option>
+    <option>Mechanical</option>
+    <option>Civil</option>
+    <option>Other</option>
+  </select>
+  <label>YEAR</label>
+  <select id="year">
+    <option value="">Select your year</option>
+    <option>1st Year</option>
+    <option>2nd Year</option>
+    <option>3rd Year</option>
+    <option>4th Year</option>
+  </select>
+  <div id="signupError" class="error"></div>
+  <button id="signupBtn" class="primary">Create account</button>
+  <div class="note">After creating your account, you will return to Login.</div>
+</div>
+</section>
+
+<!-- HOME -->
+<section id="homeScreen" class="screen hidden">
+<div class="app">
+<aside class="side">
+  <div class="logo"><div class="logoMark">O</div><div><div class="brand">Opportune</div><div class="sub">Campus opportunity organizer</div></div></div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard">⌂ &nbsp; Dashboard</button>
+    <button data-page="add">＋ &nbsp; Add Opportunity</button>
+    <button data-page="deadlines">◷ &nbsp; Deadline Tracker</button>
+    <button data-page="saved">♡ &nbsp; Saved</button>
+  </nav>
+  <div class="how"><b>HOW IT WORKS</b><br><br>1. Copy a useful message from WhatsApp.<br><br>2. Paste it into Opportune.<br><br>3. Save the organized opportunity.</div>
+  <div class="profile"><b id="profileName">Student</b><br><span id="profileDetails">CSE (AIML) • 4th Year</span></div>
+</aside>
+<main class="main">
+<header class="top"><div class="searchWrap"><input id="globalSearch" class="search" placeholder="⌕  Search opportunities..."><div id="searchResults" class="searchResults"></div></div><div class="avatar" id="avatar">S</div></header>
+<div class="content">
+
+<div id="dashboard" class="page active">
+  <div class="hero"><div class="tag">YOUR COLLEGE OPPORTUNITIES</div><h2>Don't let a good opportunity get lost in a chat.</h2><p>Turn scattered college-group messages into clear opportunities with deadlines, eligibility and the next action.</p><button id="heroAdd" class="primary">＋ Organize a WhatsApp message</button></div>
+  <div class="stats"><div class="stat"><b id="savedCount">0</b><small>Total saved</small></div><div class="stat"><b id="deadlineCount">0</b><small>Deadlines soon</small></div><div class="stat"><b id="appliedCount">0</b><small>Marked applied</small></div></div>
+  <h2 class="sectionTitle">For you</h2>
+  <p class="muted">Important opportunities from your college groups.</p>
+  <div class="cards"><div class="opp"><span class="tag">Competition</span><h3>Asian Paints Trailblazers 2026</h3><p class="muted">Deadline: 30 Sep 2026<br>Open to students from all streams and courses.</p></div><div class="opp"><span class="tag">Placement</span><h3>Campus Hiring Opportunities</h3><p class="muted">Check eligibility and application details from the placement group.</p></div></div>
+</div>
+
+<div id="add" class="page">
+  <h1>Organize a WhatsApp message</h1><p class="muted">Paste a college-group message and turn it into a clear opportunity card.</p>
+  <div class="opp" style="max-width:800px;margin-top:20px">
+    <label>WHATSAPP MESSAGE</label>
+    <textarea id="wa" style="width:100%;height:180px;border:1px solid #dfe3ee;border-radius:10px;padding:14px;resize:vertical" placeholder="Paste the opportunity message here..."></textarea>
+    <div class="attachments">
+      <label style="margin-top:0">ATTACH DOCUMENTS OR PHOTOS (OPTIONAL)</label>
+      <input id="attachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt" style="padding:10px;background:#fff">
+      <div class="muted" style="margin-top:7px">Add screenshots, brochures, PDFs or other supporting files.</div>
+      <div id="ocrStatus" class="ocrStatus"></div><img id="imagePreview" class="imagePreview" style="display:none"><div id="attachmentList"></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap"><button id="organize" class="primary" style="max-width:260px">✦ Organize opportunity</button><button id="cancelOpportunity" type="button" class="secondaryBtn">Cancel</button></div>
+    <div id="preview" style="margin-top:20px"></div>
+  </div>
+</div>
+
+<div id="deadlines" class="page"><h1>Deadline Tracker</h1><p class="muted">Know what needs your attention first.</p><div class="opp" style="margin-top:20px"><span class="tag">30 Sep 2026</span><h3>Asian Paints Trailblazers 2026</h3><p class="muted">Registration deadline approaching.</p></div></div>
+
+<div id="saved" class="page"><h1>Saved Opportunities</h1><p class="muted">Your opportunities, in one place.</p><div id="savedList" class="cards" style="margin-top:20px"></div></div>
+
+</div></main></div>
+</section>
+
+<script>
+const $=id=>document.getElementById(id);
+const show=(id)=>{["loginScreen","signupScreen","homeScreen"].forEach(x=>$(x).classList.add("hidden"));$(id).classList.remove("hidden");window.scrollTo(0,0)};
+let account=JSON.parse(localStorage.getItem("opportuneAccount")||"null");
+
+$("goSignup").onclick=()=>show("signupScreen");
+$("backLogin").onclick=()=>show("loginScreen");
+
+$("signupBtn").onclick=()=>{
+  const name=$("name").value.trim(), id=$("signupId").value.trim(), p=$("pass").value, c=$("confirm").value, branch=$("branch").value, year=$("year").value;
+  $("signupError").style.display="none";
+  if(!name||!id||!p||!c||!branch||!year){$("signupError").textContent="Please fill all fields, including branch and year.";$("signupError").style.display="block";return}
+  if(p!==c){$("signupError").textContent="Passwords do not match.";$("signupError").style.display="block";return}
+  account={name,id,password:p,branch,year};localStorage.setItem("opportuneAccount",JSON.stringify(account));
+  $("loginId").value=id;$("loginPass").value="";$("createdNotice").style.display="block";show("loginScreen");
+};
+
+$("loginBtn").onclick=()=>{
+  const id=$("loginId").value.trim(), p=$("loginPass").value;
+  $("loginError").style.display="none";
+  if(!id||!p){$("loginError").textContent="Please enter your email/phone and password.";$("loginError").style.display="block";return}
+  if(!account){ document.getElementById("loginError").textContent="No account found. Please create an account first."; document.getElementById("loginError").style.display="block"; return; }
+  if(id!==account.id || p!==account.password){ document.getElementById("loginError").textContent="Incorrect login details."; document.getElementById("loginError").style.display="block"; return; }
+  const name=account.name||"Student";
+$("profileName").textContent=name;
+$("avatar").textContent=name.charAt(0).toUpperCase();
+if(account?.branch && account?.year) $("profileDetails").textContent=account.branch+" • "+account.year;
+$("createdNotice").style.display="none";
+show("homeScreen");
+};
+
+document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>{document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));$(b.dataset.page).classList.add("active");document.querySelectorAll("[data-page]").forEach(x=>x.classList.remove("active"));b.classList.add("active")});
+$("heroAdd").onclick=()=>{document.querySelector('[data-page="add"]').click()};
+
+// Cancel the current opportunity draft and return to Dashboard.
+$("cancelOpportunity").onclick=()=>{
+  $("wa").value="";
+  $("attachments").value="";
+  window.ocrText="";
+  window.attachmentMeta=[];
+  $("preview").innerHTML="";
+  $("attachmentList").innerHTML="";
+  $("ocrStatus").textContent="";
+  $("imagePreview").style.display="none";
+  $("imagePreview").removeAttribute("src");
+  document.querySelector('[data-page="dashboard"]').click();
+};
+
+$("organize").onclick=()=>{
+ const msg=$("wa").value.trim() || (window.ocrText||"").trim();
+ if(!msg){$("preview").innerHTML='<p class="muted">Please paste a message first.</p>';return}
+
+ // Lightweight local organizer for the UI prototype (no backend/API required).
+ const clean=s=>s.replace(/[*_`]/g,'').trim();
+ const lines=msg.split(/\n/).map(x=>clean(x)).filter(Boolean);
+ const urlMatch=msg.match(/https?:\/\/[^\s<>]+/i);
+ const cleanUrl=u=>u ? u.replace(/[\*`_),.;!?\]\}]+$/g,'') : '';
+ const link=urlMatch?cleanUrl(urlMatch[0]):'';
+ let title=clean(lines[0]||'College Opportunity');
+ if(urlMatch) title=title.replace(urlMatch[0],'').trim();
+ title=title.replace(/^[-•]+/,'').trim().slice(0,90) || 'College Opportunity';
+ if(/apple\s+hiring/i.test(msg) && /software\s+engineer/i.test(msg)) title='Apple Hiring — Software Engineer';
+
+ let deadline='Not mentioned';
+ const datePatterns=[
+  /(?:deadline|last\s*date|last\s*day|apply\s*by|register(?:ation)?\s*(?:closes|ends|by|deadline)?)[^\n:]*[:\-]?\s*(\d{1,2}(?:st|nd|rd|th)?\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*,?\s*20\d{2})/i,
+  /(?:deadline|last\s*date|last\s*day|apply\s*by|register(?:ation)?)[^\n:]*[:\-]?\s*(\d{1,2}[\/\-.]\d{1,2}[\/\-.]20\d{2})/i,
+  /(?:deadline|last\s*date|last\s*day|apply\s*by|register(?:ation)?)[^\n:]*[:\-]?\s*(\d{1,2}\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)(?:\s*,?\s*20\d{2})?)/i
+ ];
+ for(const re of datePatterns){const m=msg.match(re); if(m){deadline=clean(m[1]);break;}}
+// Also detect a standalone date anywhere in the message (common in forwarded WhatsApp posts).
+if(deadline==='Not mentioned'){
+  const standalone=[
+    /\b(\d{1,2}(?:st|nd|rd|th)?\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s*,?\s*20\d{2})\b/i,
+    /\b(\d{1,2}[\/\-.]\d{1,2}[\/\-.]20\d{2})\b/
+  ];
+  for(const re of standalone){const m=msg.match(re); if(m){deadline=clean(m[1]);break;}}
+}
+
+ let eligibility='Not mentioned';
+ const eligLine=lines.find(x=>{
+   const cleaned=x.replace(/[*_]/g,'').trim();
+   if(/^(eligibility|eligible)\s*:?$/i.test(cleaned)) return false;
+   return /\b(eligible|eligibility|students?|branches?|streams?|\d+(?:st|nd|rd|th)?\s*year|years?)\b/i.test(cleaned) && cleaned.length<180;
+ });
+ if(eligLine){
+   eligibility=eligLine.replace(/^[*_\s]*(eligibility|eligible)\s*:?\s*/i,'').trim() || 'Not mentioned';
+ }
+
+ const source=link ? new URL(link).hostname.replace(/^www\./,'') : 'College group message';
+ const selectedFiles=window.attachmentMeta || Array.from($('attachments').files||[]).map(f=>({name:f.name,type:f.type||'File',size:f.size}));
+ const category=/intern(ship)?|trainee|hiring|placement|job|career/i.test(msg)?'Internship / Job':/hackathon|competition|contest|challenge/i.test(msg)?'Competition':/workshop|webinar|seminar|bootcamp/i.test(msg)?'Workshop / Event':'Opportunity';
+
+ $("preview").innerHTML=`<div class="opp">
+  <span class="tag">${category}</span>
+  <h3>${title}</h3>
+  <p class="muted"><b>Deadline:</b> ${deadline}<br><b>Eligibility:</b> ${eligibility}<br><b>Source:</b> ${source}</p>
+  ${selectedFiles.length?`<div class="attachments"><b style="font-size:12px">Attachments</b>${selectedFiles.map(f=>`<div class="attachRow"><span>📎 ${f.name}</span><span>${Math.max(1,Math.round(f.size/1024))} KB</span></div>`).join('')}</div>`:''}
+  ${deadline==='Not mentioned'?`<div style="margin:12px 0"><label style="display:block;font-size:12px;font-weight:700;color:#5b6688;margin-bottom:6px">ADD DEADLINE (OPTIONAL)</label><input id="manualDeadline" type="date" style="padding:11px;border:1px solid #d9ddec;border-radius:10px;width:220px;font:inherit"></div>`:''}
+  ${link?`<a href="${link}" target="_blank" rel="noopener" class="primary" style="display:inline-block;max-width:170px;text-align:center;text-decoration:none;margin-right:8px">↗ Open link</a>`:''}
+  <button id="saveOpp" class="primary" style="max-width:220px">♡ Save opportunity</button>
+ </div>`;
+ $("saveOpp").onclick=()=>{
+   const saved=JSON.parse(localStorage.getItem("opportuneSaved")||"[]");
+   let finalDeadline=deadline;
+   const manual=$("manualDeadline");
+   if(manual && manual.value){
+     const d=new Date(manual.value+'T00:00:00');
+     finalDeadline=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+   }
+   const item={title,category,deadline:finalDeadline,tracked:finalDeadline!=='Not mentioned',eligibility,source,link,attachments:selectedFiles,applied:false};
+   const exists=saved.some(x=>x.title===item.title && x.link===item.link);
+   if(!exists) saved.push(item);
+   localStorage.setItem("opportuneSaved",JSON.stringify(saved));
+   renderSaved();
+   updateStats();
+   alert(exists?"This opportunity is already saved.":"Opportunity saved successfully!");
+ };
+};
+
+function renderSaved(){
+ const list=$("savedList");
+ if(!list) return;
+ let saved=JSON.parse(localStorage.getItem("opportuneSaved")||"[]");
+ saved=saved.map(x=>({...x,link:x.link?x.link.replace(/[\*`_),.;!?\]\}]+$/g,""):""}));
+ localStorage.setItem("opportuneSaved",JSON.stringify(saved));
+ if(!saved.length){
+   list.innerHTML='<div class="opp"><h3>No saved opportunities yet</h3><p class="muted">Organize an opportunity and click “Save opportunity” to see it here.</p></div>';
+   return;
+ }
+ list.innerHTML=saved.map((x,i)=>`<div class="opp">
+   <span class="tag">${x.category}</span>
+   <h3>${x.title}</h3>
+   <p class="muted"><b>Deadline:</b> ${x.deadline}<br><b>Eligibility:</b> ${x.eligibility}<br><b>Source:</b> ${x.source}</p>
+   ${x.link?`<a href="${x.link}" target="_blank" rel="noopener" class="primary" style="display:inline-block;max-width:170px;text-align:center;text-decoration:none;margin-right:8px">↗ Open link</a>`:''}
+   <button class="primary applyBtn" data-index="${i}" style="max-width:160px">${x.applied?'✓ Applied':'Mark Applied'}</button>
+   <button class="primary secondary unsaveBtn" data-index="${i}" style="max-width:150px">♡ Unsave</button>
+   ${x.attachments?.length?`<div class="attachments"><b style="font-size:12px">Attachments</b>${x.attachments.map(f=>`<div class="attachRow"><span>📎 ${f.name}</span><span>${Math.max(1,Math.round(f.size/1024))} KB</span></div>`).join('')}</div>`:''}
+ </div>`).join('');
+ document.querySelectorAll('.applyBtn').forEach(btn=>btn.onclick=()=>{
+   const saved=JSON.parse(localStorage.getItem("opportuneSaved")||"[]");
+   saved[Number(btn.dataset.index)].applied=!saved[Number(btn.dataset.index)].applied;
+   localStorage.setItem("opportuneSaved",JSON.stringify(saved));
+   renderSaved(); updateStats();
+ });
+ document.querySelectorAll('.unsaveBtn').forEach(btn=>btn.onclick=()=>{
+   const saved=JSON.parse(localStorage.getItem('opportuneSaved')||'[]');
+   saved.splice(Number(btn.dataset.index),1);
+   localStorage.setItem('opportuneSaved',JSON.stringify(saved));
+   renderSaved(); renderDeadlines(); updateStats();
+ });
+}
+
+function updateStats(){
+ const saved=JSON.parse(localStorage.getItem("opportuneSaved")||"[]");
+ $("savedCount").textContent=saved.length;
+ $("appliedCount").textContent=saved.filter(x=>x.applied).length;
+ const soon=saved.filter(x=>x.tracked!==false && x.deadline && x.deadline!=="Not mentioned").length;
+ $("deadlineCount").textContent=soon;
+}
+
+function renderDeadlines(){
+ const page=$("deadlines");
+ const saved=JSON.parse(localStorage.getItem("opportuneSaved")||"[]");
+ const tracked=saved.filter(x=>x.tracked!==false && x.deadline && x.deadline!=="Not mentioned");
+ if(!tracked.length){
+   page.innerHTML='<h1>Deadline Tracker</h1><p class="muted">Know what needs your attention first.</p><div class="opp" style="margin-top:20px"><h3>No tracked deadlines yet</h3><p class="muted">Save an opportunity that contains a deadline to see it here.</p></div>';
+   return;
+ }
+ page.innerHTML='<h1>Deadline Tracker</h1><p class="muted">Know what needs your attention first.</p><div class="cards" style="margin-top:20px">'+tracked.map(x=>{
+   const idx=saved.indexOf(x);
+   return `<div class="opp"><span class="tag">${x.deadline}</span><h3>${x.title}</h3><p class="muted"><b>Eligibility:</b> ${x.eligibility}<br><b>Source:</b> ${x.source}</p>${x.link?`<a href="${x.link}" target="_blank" rel="noopener" class="primary" style="display:inline-block;max-width:170px;text-align:center;text-decoration:none;margin-right:8px">↗ Open link</a>`:''}<button class="primary danger removeTrackerBtn" data-index="${idx}" style="max-width:190px">− Remove from tracker</button></div>`;
+ }).join('')+'</div>';
+ document.querySelectorAll('.removeTrackerBtn').forEach(btn=>btn.onclick=()=>{
+   const saved=JSON.parse(localStorage.getItem('opportuneSaved')||'[]');
+   const i=Number(btn.dataset.index);
+   if(saved[i]) saved[i].tracked=false;
+   localStorage.setItem('opportuneSaved',JSON.stringify(saved));
+   renderDeadlines(); updateStats();
+ });
+}
+
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.page==='saved') renderSaved(); if(b.dataset.page==='deadlines') renderDeadlines();}));
+
+$('attachments').addEventListener('change', async ()=>{
+ const files=Array.from($('attachments').files||[]);
+ window.attachmentMeta=files.map(f=>({name:f.name,type:f.type||'File',size:f.size}));
+ $('attachmentList').innerHTML=files.length?files.map(f=>`<div class="attachRow"><span>📎 ${f.name}</span><span>${Math.max(1,Math.round(f.size/1024))} KB</span></div>`).join(''):'<span class="muted">No files selected.</span>';
+ window.ocrText='';
+ $('ocrStatus').textContent=''; $('imagePreview').style.display='none';
+ const image=files.find(f=>f.type.startsWith('image/'));
+ if(image && window.Tesseract){
+   $('ocrStatus').textContent='Analyzing the uploaded image…';
+   const reader=new FileReader();
+   reader.onload=()=>{ $('imagePreview').src=reader.result; $('imagePreview').style.display='block'; };
+   reader.readAsDataURL(image);
+   try{
+     const result=await Tesseract.recognize(image,'eng',{logger:m=>{ if(m.status==='recognizing text') $('ocrStatus').textContent=`Analyzing image… ${Math.round((m.progress||0)*100)}%`; }});
+     window.ocrText=result.data.text||'';
+     $('wa').value=window.ocrText.trim();
+     $('ocrStatus').textContent=window.ocrText.trim()?'Image analyzed. Extracted text has been added for organizing.':'Could not read text from this image. You can paste the message manually.';
+   }catch(e){ $('ocrStatus').textContent='Image analysis could not be completed. You can paste the message manually.'; }
+ } else if(image){
+   $('ocrStatus').textContent='Image OCR library is unavailable. You can paste the message manually.';
+ }
+});
+
+function getSaved(){return JSON.parse(localStorage.getItem('opportuneSaved')||'[]');}
+function showSearchResults(query){
+ const q=query.trim().toLowerCase(), box=$('searchResults');
+ if(!q){box.style.display='none';box.innerHTML='';return;}
+ const results=getSaved().filter(x=>[x.title,x.category,x.deadline,x.eligibility,x.source].join(' ').toLowerCase().includes(q));
+ box.innerHTML=results.length?results.slice(0,8).map((x,i)=>`<div class="searchResult" data-search-index="${i}"><b>${x.title}</b><span>${x.category} · ${x.deadline} · ${x.eligibility}</span></div>`).join(''):'<div class="searchResult"><b>No matching saved opportunities</b><span>Try the title, company, category, deadline or eligibility.</span></div>';
+ box.style.display='block';
+ box.querySelectorAll('[data-search-index]').forEach((el,i)=>el.onclick=()=>{ const rs=results.slice(0,8); document.querySelector('[data-page="saved"]').click(); setTimeout(()=>{ const cards=$('savedList').querySelectorAll('.opp'); if(cards[i]) cards[i].scrollIntoView({behavior:'smooth',block:'center'}); },50); box.style.display='none'; });
+}
+$('globalSearch').addEventListener('input',e=>showSearchResults(e.target.value));
+document.addEventListener('click',e=>{if(!e.target.closest('.searchWrap')) $('searchResults').style.display='none';});
+
+updateStats();
+renderSaved();
+renderDeadlines();
+show("loginScreen");
+</script>
+</body>
+</html>
